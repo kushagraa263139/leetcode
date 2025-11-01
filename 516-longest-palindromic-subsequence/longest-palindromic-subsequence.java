@@ -19,8 +19,7 @@ class Solution {
         return dp[0][0];
     }
     public int longestPalindromeSubseq(String s) {
-        String r = "";
-        for(int i=s.length()-1;i>=0;i--) r=r+s.charAt(i);
-        return longestCommonSubsequence(s,r);
+        String reversed = new StringBuilder(s).reverse().toString();
+        return longestCommonSubsequence(s,reversed);
     }
 }
