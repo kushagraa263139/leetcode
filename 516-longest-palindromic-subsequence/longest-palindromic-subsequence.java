@@ -1,25 +1,27 @@
 class Solution {
-        public int longestCommonSubsequence(String text1, String text2) {
-        int n = text1.length();
-        int m =text2.length();
-
-        int [][] dp = new int[n+1][m+1];
-        for(int i=n-1;i>=0;i--){
-            for(int j=m-1;j>=0;j--){
-                char a = text1.charAt(i);
-                char b = text2.charAt(j);
-                if(a==b){
-                    dp[i][j]=1+dp[i+1][j+1];
-                }
-                else{
-                    dp[i][j]=Math.max(dp[i+1][j],dp[i][j+1]);
-                }
+    public int lcs(String s){
+        int n=s.length();
+        int [][]dp=new int[n+1][n+1];
+        StringBuilder sb=new StringBuilder(s);
+        String s2=sb.reverse().toString();
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(s.charAt(i-1)==s2.charAt(j-1)){
+              dp[i][j]=1+dp[i-1][j-1];
+        }
+         else dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
             }
         }
-        return dp[0][0];
+        return dp[n][n];
     }
     public int longestPalindromeSubseq(String s) {
-        String reversed = new StringBuilder(s).reverse().toString();
-        return longestCommonSubsequence(s,reversed);
+       Callable<Integer>callable=()->lcs(s);
+       FutureTask<Integer>future=new FutureTask<>(callable);
+       new Thread(future).start();
+       try{
+        return future.get();
+       }catch(Exception e){
+        return 0;
+       }
     }
 }
